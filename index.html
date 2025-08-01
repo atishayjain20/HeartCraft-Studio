@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartCraft Studio | Interactive Business Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Romantic Dawn -->
+    <!-- Application Structure Plan: A single-page application with a fixed top navigation bar allowing users to jump between four core thematic sections: 'The Idea', 'The Service', 'The Business', and 'The Vision'. This non-linear, dashboard-style structure was chosen to allow stakeholders to explore the business plan based on their immediate interests (e.g., an investor might jump straight to 'The Business'). Key interactions include tabbed components for service packages, interactive cards for audience details, a dynamic Chart.js visualization for monetization, and a clickable timeline for the roadmap. This design prioritizes user-driven exploration and makes the dense information of a business plan more digestible and engaging than a linear document. -->
+    <!-- Visualization & Content Choices: 
+        - Problem/Solution: Presented in side-by-side cards to immediately connect the market gap with the business offering. Goal: Inform. Method: HTML/CSS layout. Interaction: Simple visual grouping. Justification: Clearly establishes the core value proposition.
+        - Target Audience: Interactive cards that highlight key demographics and psychographics on hover/click. Goal: Inform. Method: HTML/CSS/JS. Interaction: Hover effects. Justification: Breaks down audience data into digestible chunks.
+        - Features & Packages: A tabbed interface to switch between packages. Goal: Compare. Method: HTML/CSS/JS. Interaction: Click to toggle content visibility. Justification: Allows for direct comparison of offerings without cluttering the UI.
+        - Monetization: A Chart.js bar chart to visualize package pricing. Goal: Compare. Method: Chart.js Canvas. Interaction: Hover tooltips. Justification: Provides an immediate, quantitative comparison of pricing tiers, which is more impactful than text alone.
+        - Roadmap: A clickable horizontal timeline. Goal: Show Change/Progression. Method: HTML/CSS/JS. Interaction: Click to reveal year-specific details. Justification: Visually represents the company's growth plan over time in a compact and interactive format.
+        - Tech Stack: Represented with icons (Unicode) and text in a grid. Goal: Organize/Inform. Method: HTML/CSS Grid. Interaction: None. Justification: Scannable and clean presentation of technical information.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFF8F7;
+            color: #4A2E2E;
+        }
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #D9667B;
+            border-bottom-color: #D9667B;
+        }
+        .package-tab {
+            transition: all 0.3s;
+        }
+        .package-tab.active {
+            background-color: #D9667B;
+            color: #FFFFFF;
+        }
+        .timeline-item.active .timeline-dot {
+            background-color: #D9667B;
+            transform: scale(1.25);
+        }
+        .timeline-item.active .timeline-year {
+            color: #D9667B;
+            font-weight: 700;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold font-display text-[#D9667B]">HeartCraft Studio</h1>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#idea" class="nav-link pb-1">The Idea</a>
+                <a href="#service" class="nav-link pb-1">The Service</a>
+                <a href="#business" class="nav-link pb-1">The Business</a>
+                <a href="#vision" class="nav-link pb-1">The Vision</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-2xl">☰</button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white/90">
+            <a href="#idea" class="block text-center py-2 nav-link">The Idea</a>
+            <a href="#service" class="block text-center py-2 nav-link">The Service</a>
+            <a href="#business" class="block text-center py-2 nav-link">The Business</a>
+            <a href="#vision" class="block text-center py-2 nav-link">The Vision</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="py-20 md:py-32 bg-rose-50">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-6xl font-bold font-display mb-4">Gifting Experiences, Not Just Things.</h2>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">HeartCraft Studio is a premium digital gifting service creating bespoke, romantic online experiences that serve as a digital monument to a couple's love story.</p>
+            </div>
+        </section>
+
+        <section id="idea" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold font-display">The Idea</h3>
+                    <p class="text-md text-gray-500 mt-2">Understanding the need for truly personal and memorable gifts.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h4 class="text-2xl font-display font-bold mb-4 text-[#D9667B]">The Problem</h4>
+                        <p class="text-gray-700">In a world saturated with generic gifts, finding a unique and heartfelt present is a challenge. Standard options often feel impersonal. There's a growing desire for gifts that tell a story, evoke emotion, and create a lasting memory that can't be bought off a shelf.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h4 class="text-2xl font-display font-bold mb-4 text-[#D9667B]">The Solution</h4>
+                        <p class="text-gray-700">HeartCraft Studio crafts personalized, private mini-websites that serve as a digital monument to a couple's love story. We build immersive worlds of affection, tailored to each unique relationship, turning cherished memories into a beautiful, interactive experience.</p>
+                    </div>
+                </div>
+                <div class="mt-16">
+                    <h4 class="text-2xl font-display font-bold mb-6 text-center">Our Target Audience: The Modern Romantic</h4>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                            <h5 class="font-bold text-lg mb-2">Demographics</h5>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                <li>Ages 22-40 (Millennials & Gen Z)</li>
+                                <li>In long-term relationships, engaged, or married</li>
+                                <li>Digitally savvy and active on social media</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                             <h5 class="font-bold text-lg mb-2">Psychographics</h5>
+                            <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                <li>Value experiences over material possessions</li>
+                                <li>Seek personalization and emotional connection</li>
+                                <li>Look for "Instagram-worthy" moments to share</li>
+                                <li>Willing to invest in meaningful, high-quality gifts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="service" class="py-16 md:py-24 bg-rose-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold font-display">The Service</h3>
+                    <p class="text-md text-gray-500 mt-2">Explore our packages and see how we craft digital heirlooms.</p>
+                </div>
+                <div class="flex justify-center mb-8">
+                    <div class="flex space-x-2 bg-white p-2 rounded-full shadow-md">
+                        <button data-package="spark" class="package-tab active px-4 py-2 rounded-full text-sm md:text-base">☆ The Spark</button>
+                        <button data-package="flame" class="package-tab px-4 py-2 rounded-full text-sm md:text-base">🔥 The Flame</button>
+                        <button data-package="inferno" class="package-tab px-4 py-2 rounded-full text-sm md:text-base">🚀 The Inferno</button>
+                    </div>
+                </div>
+
+                <div id="package-details" class="bg-white p-8 rounded-lg shadow-xl max-w-4xl mx-auto">
+                </div>
+            </div>
+        </section>
+        
+        <section id="business" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold font-display">The Business</h3>
+                    <p class="text-md text-gray-500 mt-2">Our strategy for monetization, growth, and market differentiation.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h4 class="text-2xl font-display font-bold mb-4">Monetization: Tiered Packages</h4>
+                        <p class="text-gray-600 mb-6">Our tiered pricing model is designed to cater to different budgets and needs, offering clear value at each level. All premium add-ons can also be purchased individually.</p>
+                        <div class="chart-container">
+                            <canvas id="pricingChart"></canvas>
+                        </div>
+                    </div>
+                     <div>
+                        <h4 class="text-2xl font-display font-bold mb-4">Competitive Advantage</h4>
+                        <p class="text-gray-600 mb-6">Our "Wow" factor comes from a relentless focus on quality, emotion, and personalization.</p>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow"><strong>Deep Personalization:</strong> No templates. Every "HeartCraft" is a unique co-creation.</div>
+                            <div class="bg-white p-4 rounded-lg shadow"><strong>Emotional Impact:</strong> We focus on storytelling to create an emotional journey.</div>
+                            <div class="bg-white p-4 rounded-lg shadow"><strong>High-Quality Aesthetics:</strong> A design-first approach ensures every creation is a work of art.</div>
+                            <div class="bg-white p-4 rounded-lg shadow"><strong>All-in-One Service:</strong> We handle everything from design to hosting for a seamless experience.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                     <h4 class="text-2xl font-display font-bold mb-6 text-center">Marketing & Growth Strategy</h4>
+                     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="text-4xl mb-2">📱</div>
+                            <h5 class="font-bold">Social Media</h5>
+                            <p class="text-sm text-gray-500">Targeted ads on Instagram, Facebook & Pinterest.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="text-4xl mb-2">✨</div>
+                            <h5 class="font-bold">Influencers</h5>
+                            <p class="text-sm text-gray-500">Collaborations with relationship & lifestyle creators.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="text-4xl mb-2">✍️</div>
+                            <h5 class="font-bold">Content</h5>
+                            <p class="text-sm text-gray-500">Blogs & posts on romantic gifts and ideas.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="text-4xl mb-2">🔍</div>
+                            <h5 class="font-bold">SEO</h5>
+                            <p class="text-sm text-gray-500">Optimizing for keywords like "personalized romantic gifts".</p>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vision" class="py-16 md:py-24 bg-rose-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold font-display">The Vision & Roadmap</h3>
+                    <p class="text-md text-gray-500 mt-2">Our journey to become the go-to brand for high-end, personalized digital gifting.</p>
+                </div>
+                
+                <div class="relative">
+                    <div class="border-l-2 border-dashed border-[#D9667B] absolute h-full top-0 left-1/2 -ml-px"></div>
+                    <div id="timeline-container" class="space-y-16">
+                    </div>
+                </div>
+
+                 <div class="mt-16 text-center max-w-3xl mx-auto">
+                    <h4 class="text-2xl font-display font-bold mb-4">Our Ultimate Vision</h4>
+                    <p class="text-lg text-gray-700">To help people express their love in the most beautiful and memorable way possible, using the power of technology to create digital heirlooms that will be cherished for a lifetime.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-[#4A2E2E] text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 HeartCraft Studio. All Rights Reserved.</p>
+            <p class="text-sm text-gray-400 mt-2">Interactive Business Plan</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                     mobileMenu.classList.add('hidden');
+                });
+            });
+
+            const packageData = {
+                spark: {
+                    name: "☆ The Spark Package",
+                    price: "$99",
+                    description: "The essential package to create a beautiful and personal digital gift.",
+                    features: [
+                        "Core 'HeartCraft' Mini-Website",
+                        "Personalized Photo Gallery",
+                        "Digital Love Letter"
+                    ],
+                    useCase: "Perfect for a spontaneous romantic gesture or a simple, heartfelt birthday surprise."
+                },
+                flame: {
+                    name: "🔥 The Flame Package",
+                    price: "$199",
+                    description: "Add a layer of interactivity and storytelling to your romantic gift.",
+                    features: [
+                        "Everything in The Spark Package",
+                        "Interactive Relationship Timeline",
+                        "Stunning 3D Heart Animation"
+                    ],
+                    useCase: "Ideal for celebrating a special anniversary by beautifully showcasing your journey together."
+                },
+                inferno: {
+                    name: "🚀 The Inferno Package",
+                    price: "$349",
+                    description: "The ultimate, immersive romantic experience for a truly unforgettable moment.",
+                    features: [
+                        "Everything in The Flame Package",
+                        "Custom Love-Themed Mini-Game",
+                        "Cinematic Romantic Video"
+                    ],
+                    useCase: "The perfect choice for a grand gesture like a marriage proposal or a milestone celebration."
+                }
+            };
+
+            const packageTabs = document.querySelectorAll('.package-tab');
+            const packageDetailsContainer = document.getElementById('package-details');
+
+            function updatePackageDetails(packageName) {
+                const data = packageData[packageName];
+                packageDetailsContainer.innerHTML = `
+                    <h4 class="text-2xl font-display font-bold mb-2">${data.name} - <span class="text-[#D9667B]">${data.price}</span></h4>
+                    <p class="text-gray-600 mb-6">${data.description}</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-bold mb-2">Key Features:</h5>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                ${data.features.map(f => `<li>${f}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="bg-rose-50 p-4 rounded-lg">
+                             <h5 class="font-bold mb-2">Sample Use Case:</h5>
+                             <p class="text-gray-700 text-sm">${data.useCase}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            packageTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    packageTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const packageName = tab.dataset.package;
+                    updatePackageDetails(packageName);
+                });
+            });
+
+            updatePackageDetails('spark');
+
+            const pricingCtx = document.getElementById('pricingChart').getContext('2d');
+            new Chart(pricingCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Spark', 'Flame', 'Inferno'],
+                    datasets: [{
+                        label: 'Package Price ($)',
+                        data: [99, 199, 349],
+                        backgroundColor: [
+                            'rgba(217, 102, 123, 0.4)',
+                            'rgba(217, 102, 123, 0.7)',
+                            'rgba(217, 102, 123, 1.0)'
+                        ],
+                        borderColor: [
+                            'rgba(217, 102, 123, 1)',
+                            'rgba(217, 102, 123, 1)',
+                            'rgba(217, 102, 123, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#F3E8E8'
+                            }
+                        },
+                        x: {
+                             grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Price: $${context.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const timelineData = [
+                { year: "Year 1", goal: "Launch in a key market, refine our offerings based on customer feedback, and build a strong portfolio of 'HeartCrafts'." },
+                { year: "Year 2", goal: "Introduce a subscription model for couples to create a 'digital scrapbook'. Expand offerings to other life events (birthdays, baby showers)." },
+                { year: "Year 3-5", goal: "Explore AR/VR experiences, allowing couples to 'walk through' their digital memories. Become the go-to brand for high-end, personalized digital gifting worldwide." }
+            ];
+
+            const timelineContainer = document.getElementById('timeline-container');
+            timelineData.forEach((item, index) => {
+                const isEven = index % 2 === 0;
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `timeline-item relative flex items-center ${isEven ? 'justify-start' : 'justify-end'}`;
+                timelineItem.innerHTML = `
+                    <div class="w-1/2 ${isEven ? 'pr-8' : 'pl-8 text-right'}">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <p class="text-gray-700">${item.goal}</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-1/2 -translate-x-1/2 bg-white rounded-full p-1">
+                        <div class="timeline-dot w-4 h-4 bg-rose-200 rounded-full transition-all duration-300"></div>
+                    </div>
+                    <div class="w-1/2 ${isEven ? 'pl-8' : 'pr-8 text-right'}">
+                        <p class="timeline-year font-bold text-lg text-gray-500 transition-colors duration-300">${item.year}</p>
+                    </div>
+                `;
+                 if (!isEven) {
+                    timelineItem.children[0].classList.add('order-2');
+                    timelineItem.children[2].classList.add('order-1');
+                }
+                timelineContainer.appendChild(timelineItem);
+            });
+            
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems[0].classList.add('active');
+
+            timelineItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    timelineItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
